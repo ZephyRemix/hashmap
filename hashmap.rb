@@ -18,10 +18,12 @@ class HashMap
   end
 
   def set(key, value)
-    # get hashmap index
+    # get index = hash(key)
 
-    # access hashmap => self[index]
-    # 
+    # access bucket => self[index]
+    # if self[index] == empty 
+    # assign k,v to self[index]
+    # if already occupied, append to the linkedlist
   end
 end 
 
