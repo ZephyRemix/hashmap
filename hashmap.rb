@@ -1,12 +1,29 @@
 require_relative "my_linked_list/linked_list"
 require_relative "my_linked_list/node"
+require 'pry-byebug'
 
 class HashMap
+  attr_accessor :buckets
+
   def initialize
+    self.buckets = Array.new(16, nil)
   end
 
   # Use the following snippet whenever you access a bucket through an index. We want to raise an error if we try to access an out of bound index:
   # raise IndexError if index.negative? || index >= @buckets.length
+
+  def set(key, value)
+    index = self.hash(key)
+
+    if self.buckets[index] != nil
+      return self.buckets[index].append(key, value)
+    end
+
+    self.buckets[index] = LinkedList.new
+    self.buckets[index].prepend(key, value)
+  end
+
+  private 
 
   def hash(key)
     hash_code = 0
@@ -14,16 +31,7 @@ class HashMap
        
     key.each_char { |char| hash_code = prime_number * hash_code + char.ord }
        
-    hash_code
-  end
-
-  def set(key, value)
-    # get index = hash(key)
-
-    # access bucket => self[index]
-    # if self[index] == empty 
-    # assign k,v to self[index]
-    # if already occupied, append to the linkedlist
+    hash_code % self.buckets.size
   end
 end 
 
@@ -37,7 +45,8 @@ test.set('elephant', 'gray')
 test.set('frog', 'green')
 test.set('grape', 'purple')
 test.set('hat', 'black')
-test.set('ice cream', 'white')
-test.set('jacket', 'blue')
-test.set('kite', 'pink')
-test.set('lion', 'golden')
+# test.set('ice cream', 'white')
+# test.set('jacket', 'blue')
+# test.set('kite', 'pink')
+# test.set('lion', 'golden')
+# p test.inspect
