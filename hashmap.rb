@@ -64,6 +64,27 @@ class HashMap
     self.buckets = Array.new(HASHMAP_SIZE, nil)
   end
 
+  def keys
+    key_arr = []
+
+    self.for_each_node {|node| key_arr << node.key}
+    return key_arr
+  end
+
+  def values
+    value_arr = []
+
+    self.for_each_node {|node| value_arr << node.value}
+    return value_arr
+  end
+
+  def entries
+    key_value_pair = []
+
+    self.for_each_node {|node| key_value_pair << [node.key, node.value]}
+    return key_value_pair
+  end
+  
   private 
 
   def hash(key)
@@ -75,10 +96,16 @@ class HashMap
     hash_code % self.buckets.size
   end
 
-  def for_each
+  def for_each_node
     self.buckets.each do |bucket| 
       next if bucket == nil
-      yield(bucket)
+      
+      tmp = bucket.head
+
+      while (tmp != nil)
+        yield(tmp)
+        tmp = tmp.next_node
+      end 
     end
   end
 
@@ -102,6 +129,9 @@ test.set('ice cream', 'white')
 test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden')
+p test.entries
+p test.keys
+p test.values
 puts test.length
 test.clear
 p test.inspect
