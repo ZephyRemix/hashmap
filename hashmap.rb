@@ -30,6 +30,12 @@ class HashMap
     return node.value
   end
 
+  def has?(key)
+    index = self.hash(key)
+
+    self.buckets[index].contains?(key)
+  end 
+
   private 
 
   def hash(key)
@@ -53,6 +59,7 @@ test.set('frog', 'green')
 test.set('grape', 'purple')
 test.set('hat', 'black')
 puts test.get('banana')
+puts test.has?('monkey')
 # test.set('ice cream', 'white')
 # test.set('jacket', 'blue')
 # test.set('kite', 'pink')
