@@ -1,4 +1,2 @@
-test.set('ice cream', 'white')
-# test.set('jacket', 'blue')
-# test.set('kite', 'pink')
-# test.set('lion', 'golden')
+      # # if self.buckets[index] has the given key
+      # self.buckets[index].has?(key) ? 

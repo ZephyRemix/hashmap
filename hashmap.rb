@@ -16,6 +16,10 @@ class HashMap
     index = self.hash(key)
 
     if self.buckets[index] != nil
+      existing_node = self.buckets[index].find(key)
+      binding.pry
+      return existing_node.update_node(value) if !existing_node.nil?
+
       return self.buckets[index].append(key, value)
     end
 
@@ -26,8 +30,11 @@ class HashMap
   def get(key)
     index = self.hash(key)
 
-    node = self.buckets[index].find(key)
-    return node.value
+    if self.buckets[index] == nil || self.buckets[index].find(key) == nil
+      return nil
+    end
+
+    return self.buckets[index].find(key).value
   end
 
   def has?(key)
@@ -53,15 +60,15 @@ test = HashMap.new
 test.set('apple', 'red')
 test.set('banana', 'yellow')
 test.set('carrot', 'orange')
+test.set('apple', 'new value!!!!')
 test.set('dog', 'brown')
 test.set('elephant', 'gray')
 test.set('frog', 'green')
 test.set('grape', 'purple')
 test.set('hat', 'black')
-puts test.get('banana')
+puts test.get('hat')
 puts test.has?('monkey')
 # test.set('ice cream', 'white')
 # test.set('jacket', 'blue')
 # test.set('kite', 'pink')
 # test.set('lion', 'golden')
-# p test.inspect
