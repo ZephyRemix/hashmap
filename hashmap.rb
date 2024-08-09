@@ -1,6 +1,12 @@
+require_relative "my_linked_list/linked_list"
+require_relative "my_linked_list/node"
+
 class HashMap
   def initialize
   end
+
+  # Use the following snippet whenever you access a bucket through an index. We want to raise an error if we try to access an out of bound index:
+  # raise IndexError if index.negative? || index >= @buckets.length
 
   def hash(key)
     hash_code = 0
@@ -12,7 +18,10 @@ class HashMap
   end
 
   def set(key, value)
-    
+    # get hashmap index
+
+    # access hashmap => self[index]
+    # 
   end
 end 
 
