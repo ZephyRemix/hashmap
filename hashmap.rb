@@ -23,6 +23,13 @@ class HashMap
     self.buckets[index].prepend(key, value)
   end
 
+  def get(key)
+    index = self.hash(key)
+
+    node = self.buckets[index].find(key)
+    return node.value
+  end
+
   private 
 
   def hash(key)
@@ -45,6 +52,7 @@ test.set('elephant', 'gray')
 test.set('frog', 'green')
 test.set('grape', 'purple')
 test.set('hat', 'black')
+puts test.get('banana')
 # test.set('ice cream', 'white')
 # test.set('jacket', 'blue')
 # test.set('kite', 'pink')
