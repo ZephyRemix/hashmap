@@ -4,9 +4,9 @@ require 'pry-byebug'
 
 class HashMap
   attr_accessor :buckets
-
+  HASHMAP_SIZE = 16
   def initialize
-    self.buckets = Array.new(16, nil)
+    self.buckets = Array.new(HASHMAP_SIZE, nil)
   end
 
   # Use the following snippet whenever you access a bucket through an index. We want to raise an error if we try to access an out of bound index:
@@ -60,6 +60,10 @@ class HashMap
     return count
   end
 
+  def clear
+    self.buckets = Array.new(HASHMAP_SIZE, nil)
+  end
+
   private 
 
   def hash(key)
@@ -70,6 +74,14 @@ class HashMap
        
     hash_code % self.buckets.size
   end
+
+  def for_each
+    self.buckets.each do |bucket| 
+      next if bucket == nil
+      yield(bucket)
+    end
+  end
+
 end 
 
 test = HashMap.new
@@ -91,3 +103,5 @@ test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden')
 puts test.length
+test.clear
+p test.inspect
