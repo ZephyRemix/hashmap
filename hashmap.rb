@@ -17,9 +17,7 @@ class HashMap
 
     if self.buckets[index] != nil
       existing_node = self.buckets[index].find(key)
-      binding.pry
       return existing_node.update_node(value) if !existing_node.nil?
-
       return self.buckets[index].append(key, value)
     end
 
@@ -42,6 +40,25 @@ class HashMap
 
     self.buckets[index].contains?(key)
   end 
+
+  def remove(key)
+    index = self.hash(key)
+
+    curr_node = self.buckets[index].find(key)
+    # require implementation of #remove_at(index) within linked_list
+    # return deleted_value
+  end
+
+  def length
+    count = 0
+
+    self.buckets.each do |bucket| 
+      next if bucket == nil
+
+      count += bucket.size
+    end
+    return count
+  end
 
   private 
 
@@ -68,7 +85,9 @@ test.set('grape', 'purple')
 test.set('hat', 'black')
 puts test.get('hat')
 puts test.has?('monkey')
-# test.set('ice cream', 'white')
-# test.set('jacket', 'blue')
-# test.set('kite', 'pink')
-# test.set('lion', 'golden')
+
+test.set('ice cream', 'white')
+test.set('jacket', 'blue')
+test.set('kite', 'pink')
+test.set('lion', 'golden')
+puts test.length
