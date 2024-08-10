@@ -1,6 +1,5 @@
 require_relative "my_linked_list/linked_list"
 require_relative "my_linked_list/node"
-require 'pry-byebug'
 
 class HashMap
   attr_accessor :hashmap_size, :buckets, :load_threshold
@@ -92,10 +91,6 @@ class HashMap
     return count
   end
 
-  def clear
-    self.buckets = Array.new(hashmap_size, nil)
-  end
-
   def keys
     key_arr = []
     self.for_each_node {|node| key_arr << node.key}
@@ -139,7 +134,6 @@ class HashMap
   end
 
   def add_buckets
-    binding.pry
     new_buckets = Array.new(self.hashmap_size, nil)
     self.buckets << new_buckets
     self.buckets.flatten!
@@ -150,6 +144,10 @@ class HashMap
 
   def exceed_load?
     return self.length + 1 > self.load_threshold
+  end
+
+  def clear
+    self.buckets = Array.new(hashmap_size, nil)
   end
 
   def reset
