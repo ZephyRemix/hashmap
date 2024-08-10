@@ -3,16 +3,26 @@ require_relative "my_linked_list/node"
 require 'pry-byebug'
 
 class HashMap
-  attr_accessor :buckets
-  HASHMAP_SIZE = 16
+  attr_accessor :hashmap_size, :buckets, :load_threshold
+  INIT_SIZE = 16
+  LOAD_FACTOR = 0.75
+
   def initialize
-    self.buckets = Array.new(HASHMAP_SIZE, nil)
+    self.hashmap_size = INIT_SIZE
+    self.buckets = Array.new(INIT_SIZE, nil)
+    self.load_threshold = INIT_SIZE * LOAD_FACTOR
   end
 
   # Use the following snippet whenever you access a bucket through an index. We want to raise an error if we try to access an out of bound index:
   # raise IndexError if index.negative? || index >= @buckets.length
 
   def set(key, value)
+
+    if self.exceed_load?
+      self.add_buckets
+      self.reset
+    end
+
     index = self.hash(key)
 
     if self.buckets[index] != nil
@@ -45,6 +55,7 @@ class HashMap
     index = self.hash(key)
     curr_bucket = self.buckets[index]
     bucket_size = curr_bucket.size
+
     return if curr_bucket.nil?
  
     curr_bucket.traverse_list do |prev_node, curr_node|
@@ -82,28 +93,25 @@ class HashMap
   end
 
   def clear
-    self.buckets = Array.new(HASHMAP_SIZE, nil)
+    self.buckets = Array.new(hashmap_size, nil)
   end
 
   def keys
     key_arr = []
-
     self.for_each_node {|node| key_arr << node.key}
-    return key_arr
+    key_arr
   end
 
   def values
     value_arr = []
-
     self.for_each_node {|node| value_arr << node.value}
-    return value_arr
+    value_arr
   end
 
   def entries
     key_value_pair = []
-
     self.for_each_node {|node| key_value_pair << [node.key, node.value]}
-    return key_value_pair
+    key_value_pair
   end
 
   private 
@@ -129,6 +137,26 @@ class HashMap
       end 
     end
   end
+
+  def add_buckets
+    binding.pry
+    new_buckets = Array.new(self.hashmap_size, nil)
+    self.buckets << new_buckets
+    self.buckets.flatten!
+
+    self.hashmap_size = self.buckets.size
+    self.load_threshold = self.hashmap_size * LOAD_FACTOR
+  end
+
+  def exceed_load?
+    return self.length + 1 > self.load_threshold
+  end
+
+  def reset
+    entries = self.entries
+    self.clear
+    entries.each { |entry| self.set(entry[0], entry[1])}
+  end
 end
 
 
@@ -137,7 +165,6 @@ test = HashMap.new
 test.set('apple', 'red')
 test.set('banana', 'yellow')
 test.set('carrot', 'orange')
-test.set('apple', 'new value!!!!')
 test.set('dog', 'brown')
 test.set('elephant', 'gray')
 test.set('frog', 'green')
@@ -147,10 +174,6 @@ test.set('ice cream', 'white')
 test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden')
-p test.entries
-test.remove('lion')
-test.remove('kite')
-p test.entries
-p test.keys
-p test.values
 puts test.length
+test.set('moon', 'silver')
+p test
