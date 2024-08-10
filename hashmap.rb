@@ -43,10 +43,31 @@ class HashMap
 
   def remove(key)
     index = self.hash(key)
+    curr_bucket = self.buckets[index]
+    bucket_size = curr_bucket.size
+    return if curr_bucket.nil?
+ 
+    curr_bucket.traverse_list do |prev_node, curr_node|
+      puts prev_node.key
+      puts curr_node.key
 
-    curr_node = self.buckets[index].find(key)
-    # require implementation of #remove_at(index) within linked_list
-    # return deleted_value
+      if curr_node.key == key 
+ 
+        if curr_node.next_node.nil? && bucket_size > 1
+          prev_node.next_node = nil
+          curr_bucket.tail = prev_node
+          return
+
+        elsif curr_node.next_node.nil? && bucket_size == 1
+          return curr_bucket.head = nil
+
+        else 
+          prev_node.next_node = curr_node.next_node
+          curr_node = nil
+          return
+        end
+      end
+    end
   end
 
   def length
@@ -84,7 +105,7 @@ class HashMap
     self.for_each_node {|node| key_value_pair << [node.key, node.value]}
     return key_value_pair
   end
-  
+
   private 
 
   def hash(key)
@@ -108,8 +129,8 @@ class HashMap
       end 
     end
   end
+end
 
-end 
 
 test = HashMap.new
 
@@ -122,16 +143,14 @@ test.set('elephant', 'gray')
 test.set('frog', 'green')
 test.set('grape', 'purple')
 test.set('hat', 'black')
-puts test.get('hat')
-puts test.has?('monkey')
-
 test.set('ice cream', 'white')
 test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden')
 p test.entries
+test.remove('lion')
+test.remove('kite')
+p test.entries
 p test.keys
 p test.values
 puts test.length
-test.clear
-p test.inspect
